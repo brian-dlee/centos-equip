@@ -4,7 +4,7 @@
 # Author: Brian Lee <briandl92391@gmail.com>, GitHub Username: brian-dlee
 # Licence: MIT
 # Usage:
-#   wget --no-check-certificate https://github.com/brian-dlee/ubuntu-equip/raw/master/equip.sh && bash equip.sh [component]
+#   wget --no-check-certificate https://github.com/brian-dlee/centos-equip/raw/master/equip.sh && bash equip.sh [component]
 
 if [[ ! $(which wget) ]]; then
     sudo yum install -y wget
