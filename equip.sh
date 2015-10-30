@@ -52,7 +52,9 @@ done
 sudo yum update -y
 
 for component in ${components[@]}; do
-    if [[ runInstallScript($component) != 0 ]]; then
+    runInstallScript $component
+
+    if [[ $? != 0 ]]; then
         break;
     fi
 done
