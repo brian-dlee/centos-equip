@@ -3,16 +3,14 @@
 # Equip 64-bit Java 8u66 on CentOS
 # Author: Brian Lee <briandl92391@gmail.com>, GitHub Username: brian-dlee
 # Licence: MIT
-# Usage:
-#   wget --no-check-certificate https://github.com/brian-dlee/centos-equip/raw/master/equip.sh && bash equip.sh java8_64
+# Component: java8_64
+# To run, see https://github.com/brian-dlee/centos-equip
 
 if [ -d "/usr/lib/jvm/" ]; then
 	echo "There's already an installation of Java JDK in /usr/lib/jvm."
     echo "Uninstall the currently installed JDK before running this script."
 	exit 0
 fi
-
-wget --no-check-certificate https://github.com/brian-dlee/centos-equip/raw/master/equip_base.sh && bash equip_base.sh
 
 sudo yum install -y curl
 
@@ -22,9 +20,9 @@ tar -xvf jdk-8-linux-x64.tar.gz
 sudo mkdir -p /usr/lib/jvm
 sudo mv ./jdk1.8.0_66 /usr/lib/jvm/
 
-sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0_65/bin/java" 1
-sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0_65/bin/javac" 1
-sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0_65/bin/javaws" 1
+sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
+sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.8.0_66/bin/javac" 1
+sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.8.0_66/bin/javaws" 1
 
 sudo chmod a+x /usr/bin/java
 sudo chmod a+x /usr/bin/javac

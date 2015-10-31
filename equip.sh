@@ -3,16 +3,23 @@
 # Equip script wrapper
 # Author: Brian Lee <briandl92391@gmail.com>, GitHub Username: brian-dlee
 # Licence: MIT
-# Usage:
-#   wget --no-check-certificate https://github.com/brian-dlee/centos-equip/raw/master/equip.sh && bash equip.sh [component]
+# To run, see https://github.com/brian-dlee/centos-equip
 
-if [[ ! $(which wget) ]]; then
-    sudo yum install -y wget
-fi
-
-GITHUB_URL="https://github.com/brian-dlee/ubuntu-equip/raw/master/"
+GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
+GITHUB_URL="$GITHUB_ROOT/raw/master/"
 WGET_CMD=$(which wget)
 WGET_OPTS="--no-check-certificate"
+
+if [[ $? != 0 ]]; then
+    sudo yum install -y wget
+
+    WGET_CMD=$(which wget)
+
+    if [[ $? != 0 ]]; then
+        echo >&2 "The package 'wget' could not be installed. Install 'wget' and rerun: `yum install -y wget`."
+        exit 1
+    fi
+fi
 
 function runInstallScript {
     echo "Running installation for '$1'"
@@ -36,17 +43,22 @@ function runInstallScript {
 
 components=('base')
 
-while [[ ${#[@]} > 1 ]]; do
-    component=$(shift)
+if [[ $# == 0 ]]; then
+    echo "No components provided."
+    echo "For usage, see $GITHUB_ROOT."
+    exit 1
+fi
 
-    case $component in
+while [[ $# > 0 ]]; do
+    case $1 in
         'base' );;
         'java8_64' )
             components+=("java8_64");;
         '*' )
-            echo >&2 "Unknown installation request: '$component'"
-            exit 1;;
+            echo >&2 "Unknown installation request: '$1'"
+            exit 2;;
     esac
+    shift
 done
 
 sudo yum update -y
@@ -58,5 +70,3 @@ for component in ${components[@]}; do
         break;
     fi
 done
-
-rm -f equip.sh
