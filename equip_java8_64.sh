@@ -20,6 +20,10 @@ tar -xvf jdk-8-linux-x64.tar.gz
 sudo mkdir -p /usr/lib/jvm
 sudo mv ./jdk1.8.0_66 /usr/lib/jvm/
 
+sudo chown -R root:root /usr/lib/jvm
+sudo chmod -R u=rwX,g=rwX,o=rX /usr/lib/jvm
+sudo chcon -R -u system_u /usr/lib/jvm
+
 sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
 sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.8.0_66/bin/javac" 1
 sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.8.0_66/bin/javaws" 1
