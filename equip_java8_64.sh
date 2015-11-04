@@ -24,18 +24,18 @@ sudo chown -R root:root /usr/lib/jvm
 sudo chmod -R u=rwX,g=rwX,o=rX /usr/lib/jvm
 sudo chcon -R -u system_u /usr/lib/jvm
 
-sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
-sudo update-alternatives --install "/usr/bin/java" "java-1.8.0" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
-sudo update-alternatives --install "/usr/bin/java" "java-1.8.0-oracle" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
-sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.8.0_66/bin/javac" 1
-sudo update-alternatives --install "/usr/bin/java" "java-1.8.0" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
-sudo update-alternatives --install "/usr/bin/javac" "javac-1.8.0-oracle" "/usr/lib/jvm/jdk1.8.0_66/bin/javac" 1
-sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.8.0_66/bin/javaws" 1
-sudo update-alternatives --install "/usr/bin/java" "java-1.8.0" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
+sudo update-alternatives --install "/usr/bin/java"   "java"                "/usr/lib/jvm/jdk1.8.0_66/bin/java"   1
+sudo update-alternatives --install "/usr/bin/java"   "java-1.8.0"          "/usr/lib/jvm/jdk1.8.0_66/bin/java"   1
+sudo update-alternatives --install "/usr/bin/java"   "java-1.8.0-oracle"   "/usr/lib/jvm/jdk1.8.0_66/bin/java"   1
+sudo update-alternatives --install "/usr/bin/javac"  "javac"               "/usr/lib/jvm/jdk1.8.0_66/bin/javac"  1
+sudo update-alternatives --install "/usr/bin/java"   "javac-1.8.0"         "/usr/lib/jvm/jdk1.8.0_66/bin/javac"  1
+sudo update-alternatives --install "/usr/bin/javac"  "javac-1.8.0-oracle"  "/usr/lib/jvm/jdk1.8.0_66/bin/javac"  1
+sudo update-alternatives --install "/usr/bin/javaws" "javaws"              "/usr/lib/jvm/jdk1.8.0_66/bin/javaws" 1
+sudo update-alternatives --install "/usr/bin/java"   "javaws-1.8.0"        "/usr/lib/jvm/jdk1.8.0_66/bin/javaws" 1
 sudo update-alternatives --install "/usr/bin/javaws" "javaws-1.8.0-oracle" "/usr/lib/jvm/jdk1.8.0_66/bin/javaws" 1
-sudo update-alternatives --install "/usr/bin/jre" "jre" "/usr/lib/jvm/jdk1.8.0_66/jre" 1
-sudo update-alternatives --install "/usr/bin/java" "java-1.8.0" "/usr/lib/jvm/jdk1.8.0_66/bin/java" 1
-sudo update-alternatives --install "/usr/bin/jre" "jre-1.8.0-oracle" "/usr/lib/jvm/jdk1.8.0_66/jre" 1
+sudo update-alternatives --install "/usr/bin/jre"    "jre"                 "/usr/lib/jvm/jdk1.8.0_66/jre"        1
+sudo update-alternatives --install "/usr/bin/java"   "jre-1.8.0"           "/usr/lib/jvm/jdk1.8.0_66/jre"        1
+sudo update-alternatives --install "/usr/bin/jre"    "jre-1.8.0-oracle"    "/usr/lib/jvm/jdk1.8.0_66/jre"        1
 
 sudo chmod a+x /usr/bin/java
 sudo chmod a+x /usr/bin/javac
