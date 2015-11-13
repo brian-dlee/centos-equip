@@ -10,6 +10,12 @@ GITHUB_URL="$GITHUB_ROOT/raw/master/"
 WGET_CMD=$(which wget)
 WGET_OPTS="--no-check-certificate"
 
+SELINUX_ENABLED=0
+
+if [[ $(which sestatus 2>/dev/null) && -z $(sestatus | egrep 'SELinux status:\s+disabled') ]]; then
+    SELINUX_ENABLED=1
+fi
+
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 1>&2

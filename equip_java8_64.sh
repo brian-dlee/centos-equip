@@ -22,7 +22,10 @@ mv ./jdk1.8.0_66 /usr/lib/jvm/
 
 chown -R root:root /usr/lib/jvm
 chmod -R u=rwX,g=rwX,o=rX /usr/lib/jvm
-chcon -R -u system_u /usr/lib/jvm
+
+if [[ $SELINUX_ENABLED ]]; then
+	chcon -R -u system_u /usr/lib/jvm
+fi
 
 update-alternatives --install "/usr/bin/java"   "java"                "/usr/lib/jvm/jdk1.8.0_66/bin/java"   1
 update-alternatives --install "/usr/bin/java"   "java-1.8.0"          "/usr/lib/jvm/jdk1.8.0_66/bin/java"   1
@@ -37,10 +40,11 @@ update-alternatives --install "/usr/bin/jre"    "jre"                 "/usr/lib/
 update-alternatives --install "/usr/bin/jre"    "jre-1.8.0"           "/usr/lib/jvm/jdk1.8.0_66/jre"        1
 update-alternatives --install "/usr/bin/jre"    "jre-1.8.0-oracle"    "/usr/lib/jvm/jdk1.8.0_66/jre"        1
 
+chown -R root:root /usr/lib/jvm/jdk1.8.0_66
+
 chmod a+x /usr/bin/java
 chmod a+x /usr/bin/javac
 chmod a+x /usr/bin/javaws
-chown -R root:root /usr/lib/jvm/jdk1.8.0_66
 
 rm jdk-8-linux-x64.tar.gz
 
