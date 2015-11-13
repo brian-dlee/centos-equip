@@ -3,8 +3,7 @@
 ###Inspired by the [ubuntu-equip](https://github.com/aglover/ubuntu-equip) GitHub project
 
 At the time of writing this, the latest CentOS distribution is CentOS 7 which is the CentOS release these scripts have been written for.
-Since CentOS doesn't share the same affinity for sudo that Ubuntu does, these scripts are meant to be ran as root. Commands have been
-prefixed with sudo in the event that they are being ran as a non-priveleged user, but sudo configuration should be done prior to using these scripts.
+Since CentOS doesn't share the same affinity for sudo that Ubuntu does, these scripts are meant to be ran as root.
 
 Component installation
 * Download equip script:

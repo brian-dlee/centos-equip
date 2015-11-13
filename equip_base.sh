@@ -6,9 +6,9 @@
 # Component: java8_64
 # To run, see https://github.com/brian-dlee/centos-equip
 
-sudo yum install -y make automake gcc gcc-c++ kernel-devel
-sudo yum install -y rsync telnet screen wget
-sudo yum install -y strace tcpdump
-sudo yum install -y openssl-devel zlib-devel libcurl-devel libxslt-devel
+yum install -y make automake gcc gcc-c++ kernel-devel
+yum install -y rsync telnet screen wget
+yum install -y strace tcpdump
+yum install -y openssl-devel zlib-devel libcurl-devel libxslt-devel
 
-sudo yum install -y git
+yum install -y git

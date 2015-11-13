@@ -10,6 +10,12 @@ GITHUB_URL="$GITHUB_ROOT/raw/master/"
 WGET_CMD=$(which wget)
 WGET_OPTS="--no-check-certificate"
 
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
 if [[ $? != 0 ]]; then
     sudo yum install -y wget
 
