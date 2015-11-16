@@ -64,6 +64,8 @@ fi
 while [[ $# > 0 ]]; do
     case $1 in
         'base' );;
+        'java7_64' )
+            components+=("java7_64");;
         'java8_64' )
             components+=("java8_64");;
         '*' )
