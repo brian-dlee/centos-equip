@@ -14,3 +14,5 @@ Component installation
 Components:
 * Installs Oracle Java 8 JDK for 64-bit
  * Component: java8_64
+* Installs Oracle Java 7 JDK for 64-bit
+ * Component: java7_64
