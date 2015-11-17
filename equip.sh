@@ -8,7 +8,7 @@
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
 GITHUB_URL="${GITHUB_ROOT}/raw/master"
 WGET_CMD=$(which wget 2>/dev/null)
-WGET_OPTS="--no-check-certificate"
+WGET_OPTS="--quiet --no-check-certificate"
 
 SELINUX_ENABLED=0
 
@@ -23,7 +23,7 @@ if [[ ${EUID} -ne 0 ]]; then
 fi
 
 if [[ -z ${WGET_CMD} ]]; then
-    yum install -y wget
+    yum install -y -q wget
 
     WGET_CMD=$(which wget 2>/dev/null)
 
@@ -36,10 +36,16 @@ fi
 function runInstallScript {
     echo "Running installation for '${1}'"
 
-    component=$(echo ${1} | sed 's/:.\+//')
-    tag=$(echo ${1} | sed 's/.\+://')
+    component=${1}
+    tag=""
 
-    ${WGET_CMD} ${WGET_OPTS} ${GITHUB_URL}/equip_${1}.sh && bash equip_${component}.sh ${tag}
+    if [[ $(echo ${component} | grep ':') ]]; then
+        parts=($(echo ${component} | sed -r 's/:/ /'))
+        component=${parts[0]}
+        tag=${parts[1]}
+    fi
+
+    ${WGET_CMD} ${WGET_OPTS} ${GITHUB_URL}/equip_${component}.sh && bash equip_${component}.sh ${tag}
 
     result=${?}
 
@@ -84,7 +90,7 @@ while [[ ${#} > 0 ]]; do
     shift
 done
 
-yum update -y
+yum update -y -q
 
 for component in ${components[@]}; do
     runInstallScript ${component}
