@@ -6,6 +6,8 @@
 # Component: java8_64
 # To run, see https://github.com/brian-dlee/centos-equip
 
+trap 'exit 1;' ERR
+
 yum install -y make automake gcc gcc-c++ kernel-devel
 yum install -y rsync telnet screen wget
 yum install -y strace tcpdump

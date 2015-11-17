@@ -6,6 +6,8 @@
 # Component: java8_64
 # To run, see https://github.com/brian-dlee/centos-equip
 
+trap 'exit 1;' ERR
+
 if [ -d "/usr/lib/jvm/" ]; then
 	echo "There's already an installation of Java JDK in /usr/lib/jvm."
     echo "Uninstall the currently installed JDK before running this script."
