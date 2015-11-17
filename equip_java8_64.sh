@@ -24,7 +24,7 @@ yum install -y curl
 mkdir -p /usr/lib/jvm
 
 curl -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.tar.gz -o /jdk-8-linux-x64.tar.gz
-tar -xvf /jdk-8-linux-x64.tar.gz -C /usr/lib/jvm
+tar -zxf /jdk-8-linux-x64.tar.gz -C /usr/lib/jvm
 rm /jdk-8-linux-x64.tar.gz
 
 chown -R root:root /usr/lib/jvm

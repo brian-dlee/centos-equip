@@ -22,7 +22,7 @@ fi
 yum install -y curl
 
 curl -L http://ftp.wayne.edu/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz -o /apache-maven-3.3.3-bin.tar.gz
-tar -xvf /apache-maven-3.3.3-bin.tar.gz -C /usr/local/
+tar -zxf /apache-maven-3.3.3-bin.tar.gz -C /usr/local/
 rm -f /apache-maven-3.3.3-bin.tar.gz
 
 chown -R root:root /usr/local/apache-maven-3.3.3
@@ -36,8 +36,6 @@ if [[ -z $JAVA_HOME ]]; then
     export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
 fi
 
-PATH=$PATH:/usr/local/apache-maven-3.3.3/bin/
-
-export PATH
+export PATH=$PATH:/usr/local/apache-maven-3.3.3/bin/
 
 mvn --version
