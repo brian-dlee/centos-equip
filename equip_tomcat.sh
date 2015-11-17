@@ -1,12 +1,24 @@
 #!/bin/sh
 
-# Equip Apache Tomcat 8 on CentOS
+# Equip Apache Tomcat on CentOS
 # Author: Brian Lee <briandl92391@gmail.com>, GitHub Username: brian-dlee
 # Licence: MIT
 # Component: Apache Tomcat
 # To run, see https://github.com/brian-dlee/centos-equip
 
+TC_MAJOR_VERSION=8
 TC_VERSION=8.0.28
+
+case ${1} in
+	'7')
+        TC_MAJOR_VERSION=7
+        TC_VERSION=7.0.65
+        ;;
+	*)
+		echo >&2 "Cannot install the desired version of java (${1})"
+		exit 2
+esac
+
 TC_ARCHIVE=apache-tomcat-${TC_VERSION}.tar.gz
 TC_INSTALL=/usr/local/src/apache-tomcat-${TC_VERSION}
 
@@ -27,7 +39,7 @@ fi
 
 yum install -y curl
 
-curl -L http://mirror.symnds.com/software/Apache/tomcat/tomcat-8/v${TC_VERSION}/bin/${TC_ARCHIVE} -o /${TC_ARCHIVE}
+curl -L http://mirror.symnds.com/software/Apache/tomcat/tomcat-${TC_MAJOR_VERSION}/v${TC_VERSION}/bin/${TC_ARCHIVE} -o /${TC_ARCHIVE}
 tar -zxf /${TC_ARCHIVE} -C /usr/local/src
 rm -f /${TC_ARCHIVE}
 
@@ -79,7 +91,7 @@ ${persistant_vars}+=(${java_home_var})
 
 cat > /etc/systemd/system/tomcat.service <<< "
 [Unit]
-Description=Tomcat 8 Service
+Description=Tomcat ${TC_MAJOR_VERSION} Service
 After=network.target
 
 [Service]

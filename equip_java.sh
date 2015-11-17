@@ -19,7 +19,7 @@ case ${1} in
 		JAVA_MAJOR_VERSION='8'
 		JAVA_MINOR_VERSION='66'
 		;;
-	'*')
+	*)
 		echo >&2 "Cannot install the desired version of java (${1})"
 		exit 2
 esac

@@ -63,16 +63,18 @@ fi
 
 while [[ ${#} > 0 ]]; do
     case ${1} in
-        'base' );;
-        'java7' )
+        'base');;
+        'java7')
             components+=("java:7");;
-        'java8' )
+        'java8')
             components+=("java:8");;
-        'maven' )
+        'maven')
             components+=("java:7" "maven");;
-        'tomcat8' )
+        'tomcat7')
+            components+=("java:7" "tomcat:7");;
+        'tomcat8')
             components+=("java:7" "tomcat:8");;
-        '*' )
+        *)
             echo >&2 "Unknown installation request: '$1'"
             exit 2;;
     esac
