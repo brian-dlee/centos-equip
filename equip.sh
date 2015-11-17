@@ -6,8 +6,8 @@
 # To run, see https://github.com/brian-dlee/centos-equip
 
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
-GITHUB_URL="${GITHUB_ROOT}/raw/master/"
-WGET_CMD=0
+GITHUB_URL="${GITHUB_ROOT}/raw/master"
+WGET_CMD=$(which wget 2>/dev/null)
 WGET_OPTS="--no-check-certificate"
 
 SELINUX_ENABLED=0
@@ -22,10 +22,10 @@ if [[ ${EUID} -ne 0 ]]; then
    exit 1
 fi
 
-if [[ -z $(which wget 2>/dev/null) ]]; then
+if [[ -z ${WGET_CMD} ]]; then
     yum install -y wget
 
-    WGET_CMD=$(which wget)
+    WGET_CMD=$(which wget 2>/dev/null)
 
     if [[ ${?} != 0 ]]; then
         echo >&2 "The package 'wget' could not be installed. Install 'wget' and rerun: `yum install -y wget`."
@@ -65,13 +65,13 @@ while [[ ${#} > 0 ]]; do
     case ${1} in
         'base' );;
         'java7' )
-            components+=("java 7");;
+            components+=("java:7");;
         'java8' )
-            components+=("java 8");;
+            components+=("java:8");;
         'maven' )
-            components+=("java 7" "maven");;
+            components+=("java:7" "maven");;
         'tomcat8' )
-            components+=("java 7" "tomcat 8");;
+            components+=("java:7" "tomcat:8");;
         '*' )
             echo >&2 "Unknown installation request: '$1'"
             exit 2;;
@@ -82,7 +82,7 @@ done
 yum update -y
 
 for component in ${components[@]}; do
-    runInstallScript ${component}
+    runInstallScript $(echo ${component} | sed 's/:/ /g')
 
     if [[ ${?} != 0 ]]; then
         break;

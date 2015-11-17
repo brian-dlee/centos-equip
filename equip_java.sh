@@ -41,7 +41,7 @@ yum install -y curl
 mkdir -p ${JAVA_INSTALL_PREFIX}
 
 curl -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/${JAVA_ARCHIVE} -o /${JAVA_ARCHIVE}
-tar -zxf /${JAVA_ARCHIVE} -C ${JAVA_INSTALL_PREFIX}
+tar -xf /${JAVA_ARCHIVE} -C ${JAVA_INSTALL_PREFIX}
 rm /${JAVA_ARCHIVE}
 
 chown -R root:root ${JAVA_INSTALL_PREFIX}
