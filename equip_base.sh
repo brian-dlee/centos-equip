@@ -7,14 +7,17 @@
 # To run, see https://github.com/brian-dlee/centos-equip
 
 function cleanup {
+    echo >&2 "! Failed installation, entering cleanup."
     exit 1
 }
 
 trap 'cleanup' ERR
 
-yum install -y make automake gcc gcc-c++ kernel-devel
-yum install -y rsync telnet screen wget
-yum install -y strace tcpdump
-yum install -y openssl-devel zlib-devel libcurl-devel libxslt-devel
+echo "Installing CentOS prerequisite packages."
 
-yum install -y git
+yum install -y -q make automake gcc gcc-c++ kernel-devel
+yum install -y -q rsync telnet screen wget
+yum install -y -q strace tcpdump
+yum install -y -q openssl-devel zlib-devel libcurl-devel libxslt-devel
+
+yum install -y -q git

@@ -7,6 +7,7 @@
 # To run, see https://github.com/brian-dlee/centos-equip
 
 function cleanup {
+    echo >&2 "! Failed installation, entering cleanup."
     rm -f /apache-maven-3.3.3-bin.tar.gz 2>/dev/null
     exit 1
 }
@@ -19,9 +20,11 @@ if [ ! -d "/usr/lib/jvm/" ]; then
 	exit 1
 fi
 
-yum install -y curl
+echo "Installing Maven."
 
-curl -L http://ftp.wayne.edu/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz -o /apache-maven-3.3.3-bin.tar.gz
+yum install -y -q curl
+
+curl --silent -L http://ftp.wayne.edu/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz -o /apache-maven-3.3.3-bin.tar.gz
 tar -zxf /apache-maven-3.3.3-bin.tar.gz -C /usr/local/
 rm -f /apache-maven-3.3.3-bin.tar.gz
 

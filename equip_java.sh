@@ -11,10 +11,13 @@ function cleanup {
     exit 1
 }
 
+trap 'cleanup' ERR
+
 JAVA_MAJOR_VERSION='7'
 JAVA_MINOR_VERSION='65'
 
 case ${1} in
+	''|'7');;
 	'8')
 		JAVA_MAJOR_VERSION='8'
 		JAVA_MINOR_VERSION='66'
@@ -24,11 +27,11 @@ case ${1} in
 		exit 2
 esac
 
+echo "Running installer Java Version ${JAVA_MAJOR_VERSION} u${JAVA_MINOR_VERSION}"
+
 JAVA_INSTALL_PREFIX="/usr/lib/jvm"
 JAVA_INSTALL="${JAVA_INSTALL_PREFIX}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
-JAVA_ARCHIVE=jdk-${JAVA_MAJOR_VERSION}-linux-x64.tar.gz
-
-trap 'cleanup' ERR
+JAVA_ARCHIVE="jdk-${JAVA_MAJOR_VERSION}-linux-x64.tar.gz"
 
 if [ -d ${JAVA_INSTALL_PREFIX} ]; then
 	echo "There's already an installation of Java JDK in ${JAVA_INSTALL_PREFIX}."
@@ -36,12 +39,13 @@ if [ -d ${JAVA_INSTALL_PREFIX} ]; then
 	exit 0
 fi
 
-yum install -y curl
+yum install -y -q curl
 
 mkdir -p ${JAVA_INSTALL_PREFIX}
 
-curl -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/${JAVA_ARCHIVE} -o /${JAVA_ARCHIVE}
-tar -xf /${JAVA_ARCHIVE} -C ${JAVA_INSTALL_PREFIX}
+echo http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/${JAVA_ARCHIVE}
+curl --silent -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz -o /${JAVA_ARCHIVE}
+tar -zxf /${JAVA_ARCHIVE} -C ${JAVA_INSTALL_PREFIX}
 rm /${JAVA_ARCHIVE}
 
 chown -R root:root ${JAVA_INSTALL_PREFIX}

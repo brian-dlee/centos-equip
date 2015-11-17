@@ -6,16 +6,26 @@
 # Component: Apache Tomcat
 # To run, see https://github.com/brian-dlee/centos-equip
 
-TC_MAJOR_VERSION=8
-TC_VERSION=8.0.28
+function cleanup {
+    echo >&2 "! Failed installation, entering cleanup."
+    rm -f /${TC_ARCHIVE} 2>/dev/null
+    exit 1
+}
+
+trap 'cleanup' ERR
+
+TC_MAJOR_VERSION=7
+TC_VERSION=7.0.65
 
 case ${1} in
-	'7')
-        TC_MAJOR_VERSION=7
-        TC_VERSION=7.0.65
+    ''|'7');;
+	'7');;
+    '8')
+        TC_MAJOR_VERSION=8
+        TC_VERSION=8.0.28
         ;;
 	*)
-		echo >&2 "Cannot install the desired version of java (${1})"
+		echo >&2 "Cannot install the desired version of Apache Tomcat (${1})"
 		exit 2
 esac
 
@@ -24,22 +34,18 @@ TC_INSTALL=/usr/local/src/apache-tomcat-${TC_VERSION}
 
 persistant_vars=()
 
-function cleanup {
-    rm -f /${TC_ARCHIVE} 2>/dev/null
-    exit 1
-}
-
-trap 'cleanup' ERR
-
 if [ ! -d "/usr/lib/jvm/" ]; then
 	echo "There is no installation of Java JDK in /usr/lib/jvm."
     echo "Install a JDK (OpenJDK 1.7 or above) before running this script."
 	exit 1
 fi
 
-yum install -y curl
+echo "Installing Tomcat ${TC_MAJOR_VERSION}."
 
-curl -L http://mirror.symnds.com/software/Apache/tomcat/tomcat-${TC_MAJOR_VERSION}/v${TC_VERSION}/bin/${TC_ARCHIVE} -o /${TC_ARCHIVE}
+yum install -y -q curl
+
+echo http://mirror.symnds.com/software/Apache/tomcat/tomcat-${TC_MAJOR_VERSION}/v${TC_VERSION}/bin/${TC_ARCHIVE}
+curl --silent -L http://mirror.symnds.com/software/Apache/tomcat/tomcat-${TC_MAJOR_VERSION}/v${TC_VERSION}/bin/${TC_ARCHIVE} -o /${TC_ARCHIVE}
 tar -zxf /${TC_ARCHIVE} -C /usr/local/src
 rm -f /${TC_ARCHIVE}
 
@@ -57,17 +63,15 @@ else
     catalina_base_var="CATALINA_BASE=${CATALINA_BASE}"
 fi
 
-${persistant_vars}+=(${catalina_home_var} ${catalina_base_var})
+persistant_vars+=(${catalina_home_var} ${catalina_base_var})
 
 if [[ ! -e ${CATALINA_HOME} ]]; then
     mkdir -p ${CATALINA_HOME}
 fi
 
-tar -xf /${TC_ARCHIVE} -C /usr/local/src/
-
 ln -s ${TC_INSTALL}/conf /etc/tomcat
 
-ln -s ${TC_INSTALL}/logs /var/logs/tomcat
+ln -s ${TC_INSTALL}/logs /var/log/tomcat
 
 ln -s ${TC_INSTALL}/bin ${CATALINA_HOME}/bin
 ln -s ${TC_INSTALL}/lib ${CATALINA_HOME}/lib
@@ -87,7 +91,7 @@ else
     java_home_var="JAVA_HOME=${JAVA_HOME}"
 fi
 
-${persistant_vars}+=(${java_home_var})
+persistant_vars+=(${java_home_var})
 
 cat > /etc/systemd/system/tomcat.service <<< "
 [Unit]
