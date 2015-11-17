@@ -102,3 +102,8 @@ chmod -R u=rwX,g=rwX,o=rX ${CATALINA_HOME}
 if [[ ${SELINUX_ENABLED} ]]; then
 	chcon -R -u system_u ${CATALINA_HOME}
 fi
+
+cat /dev/null > /etc/profile.d/tomcat.sh
+for var in ${persistant_vars}; do
+    cat >>/etc/profile.d/tomcat.sh <<< "export ${var}\n"
+done

@@ -6,7 +6,7 @@
 # To run, see https://github.com/brian-dlee/centos-equip
 
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
-GITHUB_URL="$GITHUB_ROOT/raw/master/"
+GITHUB_URL="${GITHUB_ROOT}/raw/master/"
 WGET_CMD=0
 WGET_OPTS="--no-check-certificate"
 
@@ -17,7 +17,7 @@ if [[ $(which sestatus 2>/dev/null) && -z $(sestatus | egrep 'SELinux status:\s+
 fi
 
 # Make sure only root can run our script
-if [[ $EUID -ne 0 ]]; then
+if [[ ${EUID} -ne 0 ]]; then
    echo "This script must be run as root" 1>&2
    exit 1
 fi
@@ -27,49 +27,51 @@ if [[ -z $(which wget 2>/dev/null) ]]; then
 
     WGET_CMD=$(which wget)
 
-    if [[ $? != 0 ]]; then
+    if [[ ${?} != 0 ]]; then
         echo >&2 "The package 'wget' could not be installed. Install 'wget' and rerun: `yum install -y wget`."
         exit 1
     fi
 fi
 
 function runInstallScript {
-    echo "Running installation for '$1'"
+    echo "Running installation for '${1}'"
 
-    $WGET_CMD $WGET_OPTS $GITHUB_URL/equip_$1.sh && bash equip_$1.sh
+    ${WGET_CMD} ${WGET_OPTS} ${GITHUB_URL}/equip_${1}.sh && bash equip_${1}.sh
 
-    result=$?
+    result=${?}
 
-    if [[ -e equip_$1.sh ]]; then
-        rm -f equip_$1.sh
+    if [[ -e equip_${1}.sh ]]; then
+        rm -f equip_${1}.sh
     fi
 
-    if [[ $result != 0 ]]; then
-        echo >&2 "Failed install for '$1'";
+    if [[ ${result} != 0 ]]; then
+        echo >&2 "Failed install for '${1}'";
         return 1
     else
-        echo "Successfully ran installation for '$1'"
+        echo "Successfully ran installation for '${1}'"
         return 0
     fi
 }
 
 components=('base')
 
-if [[ $# == 0 ]]; then
+if [[ ${#} == 0 ]]; then
     echo "No components provided."
-    echo "For usage, see $GITHUB_ROOT."
+    echo "For usage, see ${GITHUB_ROOT}."
     exit 1
 fi
 
-while [[ $# > 0 ]]; do
-    case $1 in
+while [[ ${#} > 0 ]]; do
+    case ${1} in
         'base' );;
-        'java7_64' )
-            components+=("java7_64");;
-        'java8_64' )
-            components+=("java8_64");;
+        'java7' )
+            components+=("java 7");;
+        'java8' )
+            components+=("java 8");;
         'maven' )
-            components+=("java7_64" "maven");;
+            components+=("java 7" "maven");;
+        'tomcat8' )
+            components+=("java 7" "tomcat 8");;
         '*' )
             echo >&2 "Unknown installation request: '$1'"
             exit 2;;
@@ -80,9 +82,9 @@ done
 yum update -y
 
 for component in ${components[@]}; do
-    runInstallScript $component
+    runInstallScript ${component}
 
-    if [[ $? != 0 ]]; then
+    if [[ ${?} != 0 ]]; then
         break;
     fi
 done

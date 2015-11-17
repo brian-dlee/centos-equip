@@ -37,5 +37,6 @@ if [[ -z $JAVA_HOME ]]; then
 fi
 
 export PATH=$PATH:/usr/local/apache-maven-3.3.3/bin/
+cat >/etc/profile.d/maven.sh <<< 'export PATH=$PATH:/usr/local/apache-maven-3.3.3/bin/'
 
 mvn --version
