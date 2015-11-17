@@ -15,9 +15,9 @@ Note: Dependencies install automatically.
 
 Components:
 * Installs Oracle Java 8 JDK for 64-bit
- * Component: java8_64
+ * Component: `java8_64`
 * Installs Oracle Java 7 JDK for 64-bit
- * Component: java7_64
+ * Component: `java7_64`
 * Installs Apache Maven 3.3.3
- * Component: maven
- * Depends on java7_64
+ * Component: `maven`
+ * Depends on `java7_64`

@@ -23,7 +23,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 if [[ $? != 0 ]]; then
-    sudo yum install -y wget
+    yum install -y wget
 
     WGET_CMD=$(which wget)
 
@@ -77,7 +77,7 @@ while [[ $# > 0 ]]; do
     shift
 done
 
-sudo yum update -y
+yum update -y
 
 for component in ${components[@]}; do
     runInstallScript $component
