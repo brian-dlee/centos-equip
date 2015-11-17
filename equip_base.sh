@@ -6,7 +6,11 @@
 # Component: java8_64
 # To run, see https://github.com/brian-dlee/centos-equip
 
-trap 'exit 1;' ERR
+function cleanup {
+    exit 1
+}
+
+trap 'cleanup' ERR
 
 yum install -y make automake gcc gcc-c++ kernel-devel
 yum install -y rsync telnet screen wget

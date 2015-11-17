@@ -6,7 +6,12 @@
 # Component: java8_64
 # To run, see https://github.com/brian-dlee/centos-equip
 
-trap 'exit 1;' ERR
+function cleanup {
+	rm -f /jdk-8-linux-x64.tar.gz 2>/dev/null
+    exit 1
+}
+
+trap 'cleanup' ERR
 
 if [ -d "/usr/lib/jvm/" ]; then
 	echo "There's already an installation of Java JDK in /usr/lib/jvm."
@@ -16,11 +21,11 @@ fi
 
 yum install -y curl
 
-curl -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.tar.gz -o jdk-8-linux-x64.tar.gz
-tar -xvf jdk-8-linux-x64.tar.gz
-
 mkdir -p /usr/lib/jvm
-mv ./jdk1.8.0_66 /usr/lib/jvm/
+
+curl -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.tar.gz -o /jdk-8-linux-x64.tar.gz
+tar -xvf /jdk-8-linux-x64.tar.gz -C /usr/lib/jvm
+rm /jdk-8-linux-x64.tar.gz
 
 chown -R root:root /usr/lib/jvm
 chmod -R u=rwX,g=rwX,o=rX /usr/lib/jvm
@@ -47,7 +52,5 @@ chown -R root:root /usr/lib/jvm/jdk1.8.0_66
 chmod a+x /usr/bin/java
 chmod a+x /usr/bin/javac
 chmod a+x /usr/bin/javaws
-
-rm jdk-8-linux-x64.tar.gz
 
 java -version
