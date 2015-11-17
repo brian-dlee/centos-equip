@@ -36,12 +36,15 @@ fi
 function runInstallScript {
     echo "Running installation for '${1}'"
 
-    ${WGET_CMD} ${WGET_OPTS} ${GITHUB_URL}/equip_${1}.sh && bash equip_${1}.sh
+    component=$(echo ${1} | sed 's/:.\+//')
+    tag=$(echo ${1} | sed 's/.\+://')
+
+    ${WGET_CMD} ${WGET_OPTS} ${GITHUB_URL}/equip_${1}.sh && bash equip_${component}.sh ${tag}
 
     result=${?}
 
-    if [[ -e equip_${1}.sh ]]; then
-        rm -f equip_${1}.sh
+    if [[ -e equip_${component}.sh ]]; then
+        rm -f equip_${component}.sh
     fi
 
     if [[ ${result} != 0 ]]; then
@@ -84,7 +87,7 @@ done
 yum update -y
 
 for component in ${components[@]}; do
-    runInstallScript $(echo ${component} | sed 's/:/ /g')
+    runInstallScript ${component}
 
     if [[ ${?} != 0 ]]; then
         break;
