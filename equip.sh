@@ -7,7 +7,7 @@
 
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
 GITHUB_URL="$GITHUB_ROOT/raw/master/"
-WGET_CMD=$(which wget)
+WGET_CMD=0
 WGET_OPTS="--no-check-certificate"
 
 SELINUX_ENABLED=0
@@ -22,7 +22,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [[ $? != 0 ]]; then
+if [[ -z $(which wget 2>/dev/null) ]]; then
     yum install -y wget
 
     WGET_CMD=$(which wget)
