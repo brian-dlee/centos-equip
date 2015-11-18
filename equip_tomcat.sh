@@ -64,19 +64,21 @@ fi
 
 persistant_vars+=(${catalina_home_var} ${catalina_base_var})
 
-if [[ ! -e ${CATALINA_HOME} ]]; then
-    mkdir -p ${CATALINA_HOME}
-fi
-
 ln -s ${TC_INSTALL}/conf /etc/tomcat
 
 ln -s ${TC_INSTALL}/logs /var/log/tomcat
 
-ln -s ${TC_INSTALL}/bin ${CATALINA_HOME}/bin
-ln -s ${TC_INSTALL}/lib ${CATALINA_HOME}/lib
-ln -s ${TC_INSTALL}/temp ${CATALINA_HOME}/temp
-ln -s ${TC_INSTALL}/webapps ${CATALINA_HOME}/webapps
-ln -s ${TC_INSTALL}/work ${CATALINA_HOME}/work
+if [[ ! -e ${CATALINA_HOME} ]]; then
+    ln -s ${TC_INSTALL} ${CATALINA_HOME}
+else
+    ln -s ${TC_INSTALL}/bin ${CATALINA_HOME}/bin
+    ln -s ${TC_INSTALL}/conf ${CATALINA_HOME}/conf
+    ln -s ${TC_INSTALL}/lib ${CATALINA_HOME}/lib
+    ln -s ${TC_INSTALL}/logs ${CATALINA_HOME}/logs
+    ln -s ${TC_INSTALL}/temp ${CATALINA_HOME}/temp
+    ln -s ${TC_INSTALL}/webapps ${CATALINA_HOME}/webapps
+    ln -s ${TC_INSTALL}/work ${CATALINA_HOME}/work
+fi
 
 mkdir /var/lib/tomcat
 ln -s ${CATALINA_HOME}/temp /var/lib/tomcat/temp

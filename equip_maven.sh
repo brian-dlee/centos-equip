@@ -45,7 +45,7 @@ rm -f /${MAVEN_ARCHIVE}
 chown -R root:root ${MAVEN_INSTALL}
 chmod -R u=rwX,g=rwX,o=rX ${MAVEN_INSTALL}
 
-if [[ $SELINUX_ENABLED ]]; then
+if [[ ${SELINUX_ENABLED} == 1 ]]; then
 	chcon -R -u system_u ${MAVEN_INSTALL}
 fi
 

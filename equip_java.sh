@@ -52,7 +52,7 @@ rm /${JAVA_ARCHIVE}
 chown -R root:root ${JAVA_PREFIX}
 chmod -R u=rwX,g=rwX,o=rX ${JAVA_PREFIX}
 
-if [[ ${SELINUX_ENABLED} ]]; then
+if [[ ${SELINUX_ENABLED} == 1 ]]; then
 	chcon -R -u system_u ${JAVA_PREFIX}
 fi
 
