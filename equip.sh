@@ -95,7 +95,7 @@ while [[ ${#} > 0 ]]; do
         'java:8')
             components+=("java:8");;
         'maven'|'maven:3')
-            components+=("java:7" "maven");;
+            components+=("java:7" "maven:3");;
         'tomcat'|'tomcat:7')
             components+=("java:7" "tomcat:7");;
         'tomcat:8')

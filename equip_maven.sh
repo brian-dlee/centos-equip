@@ -20,10 +20,18 @@ if [ ! -d "/usr/lib/jvm/" ]; then
 	exit 1
 fi
 
-echo "Installing Maven."
-
 MAVEN_MAJOR_VERSION='3'
 MAVEN_VERSION=${MAVEN_MAJOR_VERSION}'.3.9'
+
+case ${1} in
+	''|3);;
+	*)
+		echo >&2 "Cannot install the desired version of Apache Maven (${1})"
+		exit 2
+esac
+
+echo "Installing Apache Maven ${MAVEN_VERSION}."
+
 MAVEN_ARCHIVE='apache-maven-'${MAVEN_VERSION}'-bin.tar.gz'
 MAVEN_PREFIX='/usr/local'
 MAVEN_INSTALL='/usr/local/apache-maven-'${MAVEN_VERSION}
