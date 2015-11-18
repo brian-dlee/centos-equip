@@ -18,9 +18,8 @@ TC_MAJOR_VERSION=7
 TC_VERSION=7.0.65
 
 case ${1} in
-    ''|'7');;
-	'7');;
-    '8')
+	''|7);;
+    8)
         TC_MAJOR_VERSION=8
         TC_VERSION=8.0.28
         ;;

@@ -7,6 +7,7 @@
 # To run, see https://github.com/brian-dlee/centos-equip
 
 function cleanup {
+	echo >&2 "! Failed installation, entering cleanup."
 	rm -f /${JAVA_ARCHIVE} 2>/dev/null
     exit 1
 }
@@ -17,8 +18,8 @@ JAVA_MAJOR_VERSION='7'
 JAVA_MINOR_VERSION='65'
 
 case ${1} in
-	''|'7');;
-	'8')
+	''|7);;
+	8)
 		JAVA_MAJOR_VERSION='8'
 		JAVA_MINOR_VERSION='66'
 		;;
@@ -27,7 +28,7 @@ case ${1} in
 		exit 2
 esac
 
-echo "Running installer Java Version ${JAVA_MAJOR_VERSION} u${JAVA_MINOR_VERSION}"
+echo "Running installer Java Version ${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 
 JAVA_INSTALL_PREFIX="/usr/lib/jvm"
 JAVA_INSTALL="${JAVA_INSTALL_PREFIX}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
