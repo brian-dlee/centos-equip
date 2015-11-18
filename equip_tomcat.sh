@@ -114,8 +114,13 @@ useradd -g tomcat -d ${CATALINA_HOME} -r tomcat
 chown -R tomcat:tomcat ${TC_INSTALL}
 chmod -R u=rwX,g=rwX,o=rX ${CATALINA_HOME}
 
-if [[ ${SELINUX_ENABLED} ]]; then
+if [[ ${EQUIP_SELINUX_ENABLED} ]]; then
 	chcon -R -u system_u ${CATALINA_HOME}
+fi
+
+if [[ ${EQUIP_FIREWALL_ENABLED} ]]; then
+    firewall-cmd --add-port=8080/tcp --permanent --zone public
+    firewall-cmd --quiet --reload
 fi
 
 cat /dev/null > /etc/profile.d/tomcat.sh

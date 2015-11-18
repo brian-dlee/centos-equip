@@ -22,24 +22,31 @@ fi
 
 echo "Installing Maven."
 
+MAVEN_MAJOR_VERSION='3'
+MAVEN_VERSION=${MAVEN_MAJOR_VERSION}'.3.9'
+MAVEN_ARCHIVE='apache-maven-'${MAVEN_VERSION}'-bin.tar.gz'
+MAVEN_PREFIX='/usr/local'
+MAVEN_INSTALL='/usr/local/apache-maven-'${MAVEN_VERSION}
+
 yum install -y -q curl
 
-curl --silent -L http://ftp.wayne.edu/apache/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz -o /apache-maven-3.3.3-bin.tar.gz
-tar -zxf /apache-maven-3.3.3-bin.tar.gz -C /usr/local/
-rm -f /apache-maven-3.3.3-bin.tar.gz
+curl --silent -L http://ftp.wayne.edu/apache/maven/maven-${MAVEN_MAJOR_VERSION}/${MAVEN_VERSION}/binaries/${MAVEN_ARCHIVE} -o ${MAVEN_ARCHIVE}
+tar -zxf /${MAVEN_ARCHIVE} -C ${MAVEN_PREFIX}
+rm -f /${MAVEN_ARCHIVE}
 
-chown -R root:root /usr/local/apache-maven-3.3.3
-chmod -R u=rwX,g=rwX,o=rX /usr/local/apache-maven-3.3.3
+chown -R root:root ${MAVEN_INSTALL}
+chmod -R u=rwX,g=rwX,o=rX ${MAVEN_INSTALL}
 
 if [[ $SELINUX_ENABLED ]]; then
-	chcon -R -u system_u /usr/local/apache-maven-3.3.3
+	chcon -R -u system_u ${MAVEN_INSTALL}
 fi
 
 if [[ -z $JAVA_HOME ]]; then
     export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
 fi
 
-export PATH=$PATH:/usr/local/apache-maven-3.3.3/bin/
-cat >/etc/profile.d/maven.sh <<< 'export PATH=$PATH:/usr/local/apache-maven-3.3.3/bin/'
+ln -s ${MAVEN_INSTALL}/bin/mvn ${MAVEN_PREFIX}/bin/
+ln -s ${MAVEN_INSTALL}/bin/mvnDebug ${MAVEN_PREFIX}/bin/
+ln -s ${MAVEN_INSTALL}/bin/mvnyjp ${MAVEN_PREFIX}/bin/
 
 mvn --version

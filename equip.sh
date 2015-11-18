@@ -10,11 +10,14 @@ GITHUB_URL="${GITHUB_ROOT}/raw/master"
 WGET_CMD=$(which wget 2>/dev/null)
 WGET_OPTS="--quiet --no-check-certificate"
 
-SELINUX_ENABLED=0
+export EQUIP_SELINUX_ENABLED=0
+export EQUIP_FIREWALL_ENABLED=0
 
 if [[ $(which sestatus 2>/dev/null) && -z $(sestatus | egrep 'SELinux status:\s+disabled') ]]; then
-    SELINUX_ENABLED=1
+    export EQUIP_SELINUX_ENABLED=1
 fi
+
+
 
 # Make sure only root can run our script
 if [[ ${EUID} -ne 0 ]]; then
@@ -32,6 +35,21 @@ if [[ -z ${WGET_CMD} ]]; then
         exit 1
     fi
 fi
+
+function collapseComponents {
+    i=0
+    list=()
+    element=shift
+
+    while [[ ${element} ]]; do
+        if [[ $(echo ${components[@]} | egrep -v "${element} ") ]]; then
+            list+=("${element}")
+        fi
+        element=shift
+    done
+
+    echo ${list[@]}
+}
 
 function runInstallScript {
     echo "Running installation for '${1}'"
@@ -89,6 +107,8 @@ while [[ ${#} > 0 ]]; do
     esac
     shift
 done
+
+components=($(collapseComponents ${#components[@]} ${components[@]}))
 
 yum update -y -q
 
