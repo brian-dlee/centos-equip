@@ -37,15 +37,14 @@ if [[ -z ${WGET_CMD} ]]; then
 fi
 
 function collapseComponents {
-    i=0
-    list=()
-    element=shift
+    list=($1)
+    shift
 
-    while [[ ${element} ]]; do
-        if [[ $(echo ${components[@]} | egrep -v "${element} ") ]]; then
-            list+=("${element}")
+    while [[ ! -z ${1} ]]; do
+        if [[ $(echo ${list[@]} | grep -v "${1}") ]]; then
+            list+=("${1}")
         fi
-        element=shift
+        shift
     done
 
     echo ${list[@]}
@@ -91,15 +90,15 @@ fi
 while [[ ${#} > 0 ]]; do
     case ${1} in
         'base');;
-        'java7')
+        'java'|'java:7')
             components+=("java:7");;
-        'java8')
+        'java:8')
             components+=("java:8");;
-        'maven')
+        'maven'|'maven:3')
             components+=("java:7" "maven");;
-        'tomcat7')
+        'tomcat'|'tomcat:7')
             components+=("java:7" "tomcat:7");;
-        'tomcat8')
+        'tomcat:8')
             components+=("java:7" "tomcat:8");;
         *)
             echo >&2 "Unknown installation request: '$1'"
@@ -108,7 +107,7 @@ while [[ ${#} > 0 ]]; do
     shift
 done
 
-components=($(collapseComponents ${#components[@]} ${components[@]}))
+components=($(collapseComponents ${components[@]}))
 
 yum update -y -q
 

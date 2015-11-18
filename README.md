@@ -14,13 +14,16 @@ Component installation
 Note: Dependencies install automatically.
 
 Components:
-* Installs 64-bit Oracle Java 8 JDK
- * Component: `java8`
 * Installs 64-bit Oracle Java 7 JDK
- * Component: `java7`
-* Installs Apache Maven 3.3.3
- * Component: `maven`
+ * Component: `java` or `java:7`
+* Installs 64-bit Oracle Java 8 JDK
+ * Component: `java:8`
+* Installs Apache Maven 3.3.9
+ * Component: `maven` or `maven:3`
+ * Depends on `java7`
+* Installs Apache Tomcat 7.0.65
+ * Component: `tomcat` or `tomcat7`
  * Depends on `java7`
 * Installs Apache Tomcat 8.0.28
- * Component: `tomcat`
+ * Component: `tomcat8`
  * Depends on `java7`

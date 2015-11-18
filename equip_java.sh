@@ -30,30 +30,30 @@ esac
 
 echo "Running installer Java Version ${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 
-JAVA_INSTALL_PREFIX="/usr/lib/jvm"
-JAVA_INSTALL="${JAVA_INSTALL_PREFIX}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
+JAVA_PREFIX="/usr/lib/jvm"
+JAVA_INSTALL="${JAVA_PREFIX}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
 JAVA_ARCHIVE="jdk-${JAVA_MAJOR_VERSION}-linux-x64.tar.gz"
 
-if [ -d ${JAVA_INSTALL_PREFIX} ]; then
-	echo "There's already an installation of Java JDK in ${JAVA_INSTALL_PREFIX}."
-    echo "Uninstall the currently installed JDK before running this script."
+if [ -d ${JAVA_INSTALL} ]; then
+	echo "There's already an installation of Java JDK at ${JAVA_INSTALL}."
+    echo "Uninstall the currently installed JDK before running this installer."
 	exit 0
 fi
 
 yum install -y -q curl
 
-mkdir -p ${JAVA_INSTALL_PREFIX}
+mkdir -p ${JAVA_PREFIX}
 
 echo http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/${JAVA_ARCHIVE}
 curl --silent -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz -o /${JAVA_ARCHIVE}
-tar -zxf /${JAVA_ARCHIVE} -C ${JAVA_INSTALL_PREFIX}
+tar -zxf /${JAVA_ARCHIVE} -C ${JAVA_PREFIX}
 rm /${JAVA_ARCHIVE}
 
-chown -R root:root ${JAVA_INSTALL_PREFIX}
-chmod -R u=rwX,g=rwX,o=rX ${JAVA_INSTALL_PREFIX}
+chown -R root:root ${JAVA_PREFIX}
+chmod -R u=rwX,g=rwX,o=rX ${JAVA_PREFIX}
 
 if [[ ${SELINUX_ENABLED} ]]; then
-	chcon -R -u system_u ${JAVA_INSTALL_PREFIX}
+	chcon -R -u system_u ${JAVA_PREFIX}
 fi
 
 update-alternatives --install "/usr/bin/java"   "java"                                    "${JAVA_INSTALL}/bin/java"   1
