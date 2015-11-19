@@ -22,8 +22,8 @@ Components:
  * Component: `maven` or `maven:3`
  * Depends on `java:7`
 * Installs Apache Tomcat 7.0.65
- * Component: `tomcat` or `tomcat7`
+ * Component: `tomcat` or `tomcat:7`
  * Depends on `java:7`
 * Installs Apache Tomcat 8.0.28
- * Component: `tomcat8`
+ * Component: `tomcat:8`
  * Depends on `java:7`
