@@ -75,7 +75,7 @@ chmod a+x /usr/bin/java
 chmod a+x /usr/bin/javac
 chmod a+x /usr/bin/javaws
 
-export JAVA_HOME=${JAVA_INSTALL}/jre
+export JAVA_HOME=${JAVA_INSTALL}
 cat >/etc/profile.d/oracle-java-${JAVA_MAJOR_VERSION}.sh <<< "export JAVA_HOME=${JAVA_HOME}"
 
 java -version

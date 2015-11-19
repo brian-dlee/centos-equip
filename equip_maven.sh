@@ -34,7 +34,7 @@ echo "Installing Apache Maven ${MAVEN_VERSION}."
 
 MAVEN_ARCHIVE='apache-maven-'${MAVEN_VERSION}'-bin.tar.gz'
 MAVEN_PREFIX='/usr/local'
-MAVEN_INSTALL='/usr/local/apache-maven-'${MAVEN_VERSION}
+MAVEN_INSTALL='/usr/local/src/apache-maven-'${MAVEN_VERSION}
 
 yum install -y -q curl
 

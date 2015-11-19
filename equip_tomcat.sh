@@ -86,7 +86,7 @@ ln -s ${CATALINA_HOME}/webapps /var/lib/tomcat/webapps
 ln -s ${CATALINA_HOME}/work /var/lib/tomcat/work
 
 if [[ -z ${JAVA_HOME} ]]; then
-    java_home_var="JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')"
+    java_home_var="JAVA_HOME=$(update-alternatives --display jre | grep "\`best'" | egrep -o '/.+' | sed 's/\/jre.*//')"
     export ${java_home_var}
 else
     java_home_var="JAVA_HOME=${JAVA_HOME}"
@@ -126,6 +126,6 @@ if [[ ${EQUIP_FIREWALL_ENABLED} == 1 ]]; then
 fi
 
 cat /dev/null > /etc/profile.d/tomcat.sh
-for var in ${persistant_vars}; do
-    cat >>/etc/profile.d/tomcat.sh <<< "export ${var}\n"
+for var in ${persistant_vars[@]}; do
+    cat >>/etc/profile.d/tomcat.sh <<< "export ${var}"
 done
