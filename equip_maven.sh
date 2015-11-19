@@ -34,12 +34,12 @@ echo "Installing Apache Maven ${MAVEN_VERSION}."
 
 MAVEN_ARCHIVE='apache-maven-'${MAVEN_VERSION}'-bin.tar.gz'
 MAVEN_PREFIX='/usr/local'
-MAVEN_INSTALL='/usr/local/src/apache-maven-'${MAVEN_VERSION}
+MAVEN_INSTALL=${MAVEN_PREFIX}'/src/apache-maven-'${MAVEN_VERSION}
 
 yum install -y -q curl
 
 curl --silent -L http://ftp.wayne.edu/apache/maven/maven-${MAVEN_MAJOR_VERSION}/${MAVEN_VERSION}/binaries/${MAVEN_ARCHIVE} -o ${MAVEN_ARCHIVE}
-tar -zxf /${MAVEN_ARCHIVE} -C ${MAVEN_PREFIX}
+tar -zxf /${MAVEN_ARCHIVE} -C ${MAVEN_PREFIX}/src
 rm -f /${MAVEN_ARCHIVE}
 
 chown -R root:root ${MAVEN_INSTALL}
