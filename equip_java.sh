@@ -16,12 +16,14 @@ trap 'cleanup' ERR
 
 JAVA_MAJOR_VERSION='7'
 JAVA_MINOR_VERSION='80'
+JAVA_MTN_KEY='b-15'
 
 case ${1} in
 	''|7);;
 	8)
 		JAVA_MAJOR_VERSION='8'
 		JAVA_MINOR_VERSION='66'
+		JAVA_MTN_KEY='b-17'
 		;;
 	*)
 		echo >&2 "Cannot install the desired version of java (${1})"
@@ -44,7 +46,7 @@ yum install -y -q curl
 
 mkdir -p ${JAVA_PREFIX}
 
-echo http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/${JAVA_ARCHIVE}
+echo http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-${JAVA_MTN_KEY}/${JAVA_ARCHIVE}
 curl --silent -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-b17/jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz -o /${JAVA_ARCHIVE}
 tar -zxf /${JAVA_ARCHIVE} -C ${JAVA_PREFIX}
 rm /${JAVA_ARCHIVE}
