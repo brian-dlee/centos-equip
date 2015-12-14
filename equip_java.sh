@@ -15,7 +15,7 @@ function cleanup {
 trap 'cleanup' ERR
 
 JAVA_MAJOR_VERSION='7'
-JAVA_MINOR_VERSION='65'
+JAVA_MINOR_VERSION='80'
 
 case ${1} in
 	''|7);;

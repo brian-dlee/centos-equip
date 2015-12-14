@@ -21,7 +21,7 @@ case ${1} in
 	''|7);;
     8)
         TC_MAJOR_VERSION=8
-        TC_VERSION=8.0.28
+        TC_VERSION=8.0.30
         ;;
 	*)
 		echo >&2 "Cannot install the desired version of Apache Tomcat (${1})"
