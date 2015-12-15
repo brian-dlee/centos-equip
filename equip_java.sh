@@ -17,7 +17,7 @@ trap 'cleanup' ERR
 JAVA_MAJOR_VERSION='7'
 JAVA_MINOR_VERSION='80'
 JAVA_MTN_KEY='b15'
-JAVA_DL_FILENAME='jdk-${JAVA_MAJOR_VERSION}-linux-x64.tar.gz'
+JAVA_DL_FILENAME="jdk-${JAVA_MAJOR_VERSION}-linux-x64.tar.gz"
 
 case ${1} in
 	''|7);;
@@ -25,7 +25,7 @@ case ${1} in
 		JAVA_MAJOR_VERSION='8'
 		JAVA_MINOR_VERSION='66'
 		JAVA_MTN_KEY='b17'
-		JAVA_DL_FILENAME='jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz'
+		JAVA_DL_FILENAME="jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz"
 		;;
 	*)
 		echo >&2 "Cannot install the desired version of java (${1})"
