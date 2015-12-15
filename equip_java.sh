@@ -17,7 +17,6 @@ trap 'cleanup' ERR
 JAVA_MAJOR_VERSION='7'
 JAVA_MINOR_VERSION='80'
 JAVA_MTN_KEY='b15'
-JAVA_DL_FILENAME="jdk-${JAVA_MAJOR_VERSION}-linux-x64.tar.gz"
 
 case ${1} in
 	''|7);;
@@ -25,7 +24,6 @@ case ${1} in
 		JAVA_MAJOR_VERSION='8'
 		JAVA_MINOR_VERSION='66'
 		JAVA_MTN_KEY='b17'
-		JAVA_DL_FILENAME="jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz"
 		;;
 	*)
 		echo >&2 "Cannot install the desired version of java (${1})"
@@ -36,7 +34,7 @@ echo "Running installer Java Version ${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}
 
 JAVA_PREFIX="/usr/lib/jvm"
 JAVA_INSTALL="${JAVA_PREFIX}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
-JAVA_ARCHIVE="jdk-${JAVA_MAJOR_VERSION}-linux-x64.tar.gz"
+JAVA_ARCHIVE="jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz"
 
 if [ -d ${JAVA_INSTALL} ]; then
 	echo "There's already an installation of Java JDK at ${JAVA_INSTALL}."
@@ -48,10 +46,9 @@ yum install -y -q curl
 
 mkdir -p ${JAVA_PREFIX}
 
-JAVA_DL_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-${JAVA_MTN_KEY}/${JAVA_DL_FILENAME}"
+JAVA_DL_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-${JAVA_MTN_KEY}/${JAVA_ARCHIVE}"
 
-echo "Downloading JDK"
-echo "-- ${JAVA_DL_URL}"
+echo "Downloading JDK ${JAVA_DL_URL}"
 curl --silent -L --cookie "oraclelicense=accept-securebackup-cookie" ${JAVA_DL_URL} -o /${JAVA_ARCHIVE}
 tar -zxf /${JAVA_ARCHIVE} -C ${JAVA_PREFIX}
 rm /${JAVA_ARCHIVE}
