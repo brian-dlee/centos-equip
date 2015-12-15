@@ -16,14 +16,14 @@ trap 'cleanup' ERR
 
 JAVA_MAJOR_VERSION='7'
 JAVA_MINOR_VERSION='80'
-JAVA_MTN_KEY='b-15'
+JAVA_MTN_KEY='b15'
 
 case ${1} in
 	''|7);;
 	8)
 		JAVA_MAJOR_VERSION='8'
 		JAVA_MINOR_VERSION='66'
-		JAVA_MTN_KEY='b-17'
+		JAVA_MTN_KEY='b17'
 		;;
 	*)
 		echo >&2 "Cannot install the desired version of java (${1})"
