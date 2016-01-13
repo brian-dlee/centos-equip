@@ -27,3 +27,9 @@ Components:
 * Installs Apache Tomcat 8.0.28
  * Component: `tomcat:8`
  * Depends on `java:7`
+* Installs Atlassian Bamboo Remote Agent
+ * Component: `bamboo-remote-agent:BAMBOO_VERSION:BAMBOO_SERVER_HOSTNAME`
+ * Depends on `java:8`
+ * Options:
+  * BAMBOO_VERSION: Supply the version of the bamboo remote agent required
+  * BAMBOO_SERVER_HOSTNAME: Supply the url to the server running bamboo

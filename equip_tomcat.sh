@@ -35,7 +35,7 @@ persistant_vars=()
 
 if [ ! -d "/usr/lib/jvm/" ]; then
 	echo "There is no installation of Java JDK in /usr/lib/jvm."
-    echo "Install a JDK (OpenJDK 1.7 or above) before running this script."
+    echo "Install a JDK (1.7 or above) before running this script."
 	exit 1
 fi
 

@@ -7,6 +7,14 @@
 
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
 GITHUB_URL="${GITHUB_ROOT}/raw/master"
+
+yum install -y -q which 2>/dev/null
+
+if [[ ${?} != 0 ]]; then
+    echo >&2 "The package 'which' could not be installed. Install 'which' and rerun."
+    exit 1
+fi
+
 WGET_CMD=$(which wget 2>/dev/null)
 WGET_OPTS="--quiet --no-check-certificate"
 
@@ -17,8 +25,6 @@ if [[ $(which sestatus 2>/dev/null) && -z $(sestatus | egrep 'SELinux status:\s+
     export EQUIP_SELINUX_ENABLED=1
 fi
 
-
-
 # Make sure only root can run our script
 if [[ ${EUID} -ne 0 ]]; then
    echo "This script must be run as root" 1>&2
@@ -26,12 +32,12 @@ if [[ ${EUID} -ne 0 ]]; then
 fi
 
 if [[ -z ${WGET_CMD} ]]; then
-    yum install -y -q wget
+    yum install -y -q wget 2>/dev/null
 
     WGET_CMD=$(which wget 2>/dev/null)
 
     if [[ ${?} != 0 ]]; then
-        echo >&2 "The package 'wget' could not be installed. Install 'wget' and rerun: `yum install -y wget`."
+        echo >&2 "The package 'wget' could not be installed. Install 'wget' and rerun."
         exit 1
     fi
 fi
@@ -90,6 +96,8 @@ fi
 while [[ ${#} > 0 ]]; do
     case ${1} in
         'base');;
+        'bamboo-remote-agent:*')
+            components+=("java:8 ${1}");;
         'java'|'java:7')
             components+=("java:7");;
         'java:8')
@@ -101,7 +109,7 @@ while [[ ${#} > 0 ]]; do
         'tomcat:8')
             components+=("java:7" "tomcat:8");;
         *)
-            echo >&2 "Unknown installation request: '$1'"
+            echo >&2 "Unknown installation request: '${1}'"
             exit 2;;
     esac
     shift

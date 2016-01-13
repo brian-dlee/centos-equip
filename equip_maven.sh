@@ -8,7 +8,7 @@
 
 function cleanup {
     echo >&2 "! Failed installation, entering cleanup."
-    rm -f /apache-maven-3.3.3-bin.tar.gz 2>/dev/null
+    rm -f /apache-maven-${MAVEN_VERSION}-bin.tar.gz 2>/dev/null
     exit 1
 }
 
@@ -16,7 +16,7 @@ trap 'cleanup' ERR
 
 if [ ! -d "/usr/lib/jvm/" ]; then
 	echo "There is no installation of Java JDK in /usr/lib/jvm."
-    echo "Install a JDK (OpenJDK 1.7 or above) before running this script."
+    echo "Install a JDK (1.7 or above) before running this script."
 	exit 1
 fi
 
