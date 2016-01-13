@@ -38,13 +38,14 @@ echo "Installing Bamboo Agent version ${BAMBOO_AGENT_VERSION}."
 
 BAMBOO_AGENT_JAR='atlassian-bamboo-agent-installer-'${BAMBOO_AGENT_VERSION}'.jar'
 BAMBOO_AGENT_PREFIX='/root'
+BAMBOO_AGENT_JAR_DESTINATION=${BAMBOO_AGENT_PREFIX}/${BAMBOO_AGENT_JAR}
 
 yum install -y -q curl
 
-curl --silent -L http://${BAMBOO_SERVER_HOSTNAME}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_PREFIX}/${BAMBOO_AGENT_JAR}
+curl --silent -L http://${BAMBOO_SERVER_HOSTNAME}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_JAR_DESTINATION}
 
 if [[ -z $JAVA_HOME ]]; then
     export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
 fi
 
-java -jar atlassian-bamboo-agent-installer-5.9.7.jar http://${BAMBOO_SERVER_HOSTNAME}/agentServer/
+java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER_HOSTNAME}/agentServer/
