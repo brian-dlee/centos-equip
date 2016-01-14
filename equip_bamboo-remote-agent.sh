@@ -31,7 +31,7 @@ BAMBOO_SERVER_HOSTNAME=${2}
 BAMBOO_SERVER_PORT=8085
 
 if [[ -n ${3} ]]; then
-    BAMBOO_SERVER_HOSTNAME=${3}
+    BAMBOO_SERVER_PORT=${3}
 fi
 
 echo "Installing Bamboo Agent version ${BAMBOO_AGENT_VERSION}."
