@@ -6,6 +6,8 @@
 # To run, see https://github.com/brian-dlee/centos-equip
 
 EQUIP_LOCATION=$(cd $(dirname $0) && pwd)
+EQUIP_OPT_FORCE_UPDATE=0
+EQUIP_OPT_SKIP_BASE=0
 
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
 GITHUB_URL="${GITHUB_ROOT}/raw/master"
@@ -59,6 +61,10 @@ function collapseComponents {
 }
 
 function runInstallScript {
+    if [[ ${1} == 'base' && ${EQUIP_OPT_SKIP_BASE} == 1 ]]; then
+        return 0
+    fi
+
     echo "Running installation for '${1}'"
 
     component=${1}
@@ -73,7 +79,11 @@ function runInstallScript {
     script_destination="${EQUIP_LOCATION}/equip_${component}.sh"
     found_component_script=0
 
-    if [[ ! -e ${script_destination} ]]; then
+    if [[ ! -e ${script_destination} || ${EQUIP_OPT_FORCE_UPDATE} == 1 ]]; then
+        if [[ -e ${script_destination} ]]; then
+            found_component_script=1
+        fi
+
         ${WGET_CMD} -P ${EQUIP_LOCATION} ${GITHUB_URL}/equip_${component}.sh
     else
         echo "Found existing component script. Executing ${script_destination}."
@@ -95,6 +105,13 @@ function runInstallScript {
         echo "Successfully ran installation for '${1}'"
         return 0
     fi
+}
+
+function showUsage {
+    echo "Usage: equip.sh [OPTIONS] [COMPONENTS]"
+    echo "  -d  --disable-base:     Prevent execution of equip_base.sh (by default this always runs)"
+    echo "  -u  --force-update:     The default is to use local component installation scripts if possible, this prevents it"
+    echo "  -h  --help:             Shows this usage dialog"
 }
 
 components=('base')
@@ -121,6 +138,15 @@ while [[ ${#} > 0 ]]; do
             components+=("java:7" "tomcat:7");;
         tomcat:8)
             components+=("java:7" "tomcat:8");;
+
+        --disable-base|-d)
+            EQUIP_OPT_SKIP_BASE=1;;
+        --force-update|-u)
+            EQUIP_OPT_FORCE_UPDATE=1;;
+        --help|-h)
+            showUsage
+            exit 0
+            ;;
         *)
             echo >&2 "Unknown installation request: '${1}'"
             exit 2
