@@ -14,12 +14,6 @@ function cleanup {
 
 trap 'cleanup' ERR
 
-if [ ! -d "/usr/lib/jvm/" ]; then
-	echo "There is no installation of Java JDK in /usr/lib/jvm."
-    echo "Install a JDK (1.7 or above) before running this script."
-	exit 1
-fi
-
 if [[ -z ${1} ]]; then
     echo >&2 "Bamboo Agent version not provided. The version is required to complete the install."
     exit 2
@@ -42,10 +36,12 @@ BAMBOO_AGENT_JAR_DESTINATION=${BAMBOO_AGENT_PREFIX}/${BAMBOO_AGENT_JAR}
 
 yum install -y -q curl
 
-curl --silent -L http://${BAMBOO_SERVER_HOSTNAME}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_JAR_DESTINATION}
+curl -L http://${BAMBOO_SERVER_HOSTNAME}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_JAR_DESTINATION}
 
 if [[ -z $JAVA_HOME ]]; then
     export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
 fi
+
+cat >/etc/profile.d/bamboo-remote-agent.sh <<< "export JAVA_HOME=${JAVA_HOME}"
 
 java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER_HOSTNAME}/agentServer/

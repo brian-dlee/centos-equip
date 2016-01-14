@@ -14,12 +14,6 @@ function cleanup {
 
 trap 'cleanup' ERR
 
-if [ ! -d "/usr/lib/jvm/" ]; then
-	echo "There is no installation of Java JDK in /usr/lib/jvm."
-    echo "Install a JDK (1.7 or above) before running this script."
-	exit 1
-fi
-
 MAVEN_MAJOR_VERSION='3'
 MAVEN_VERSION=${MAVEN_MAJOR_VERSION}'.3.9'
 
@@ -52,6 +46,8 @@ fi
 if [[ -z $JAVA_HOME ]]; then
     export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
 fi
+
+cat >/etc/profile.d/maven.sh <<< "export JAVA_HOME=${JAVA_HOME}"
 
 ln -s ${MAVEN_INSTALL}/bin/mvn ${MAVEN_PREFIX}/bin/
 ln -s ${MAVEN_INSTALL}/bin/mvnDebug ${MAVEN_PREFIX}/bin/

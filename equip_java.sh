@@ -30,56 +30,33 @@ case ${1} in
 		exit 2
 esac
 
-echo "Running installer Java Version ${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
+echo "Running installer Oracle Java Version ${JAVA_MAJOR_VERSION}"
 
-JAVA_PREFIX="/usr/lib/jvm"
-JAVA_INSTALL="${JAVA_PREFIX}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
-JAVA_ARCHIVE="jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.tar.gz"
+JAVA_PACKAGE="jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
+JAVA_INSTALL_ENTRY=$(update-alternatives --display java | grep 'priority' | grep "${JAVA_PACKAGE}")
 
-if [ -d ${JAVA_INSTALL} ]; then
-	echo "There's already an installation of Java JDK at ${JAVA_INSTALL}."
-    echo "Uninstall the currently installed JDK before running this installer."
+if [[ ${JAVA_INSTALL_ENTRY} ]]; then
+	echo "Java ${JAVA_MAJOR_VERSION} is already installed."
+	echo "- ${JAVA_INSTALL_ENTRY}"
 	exit 0
 fi
 
 yum install -y -q curl
 
-mkdir -p ${JAVA_PREFIX}
+JAVA_RPM="jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.rpm"
+JAVA_DL_DIR='/root'
+JAVA_DL_DEST="${JAVA_DL_DIR}/${JAVA_RPM}"
 
-JAVA_DL_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-${JAVA_MTN_KEY}/${JAVA_ARCHIVE}"
+JAVA_DL_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-${JAVA_MTN_KEY}/${JAVA_RPM}"
 
-echo "Downloading JDK ${JAVA_DL_URL}"
-curl --silent -L --cookie "oraclelicense=accept-securebackup-cookie" ${JAVA_DL_URL} -o /${JAVA_ARCHIVE}
-tar -zxf /${JAVA_ARCHIVE} -C ${JAVA_PREFIX}
-rm /${JAVA_ARCHIVE}
+echo "Downloading Java JDK RPM - ${JAVA_DL_URL}"
+curl -L --cookie "oraclelicense=accept-securebackup-cookie" ${JAVA_DL_URL} -o /${JAVA_DL_DEST}
 
-chown -R root:root ${JAVA_PREFIX}
-chmod -R u=rwX,g=rwX,o=rX ${JAVA_PREFIX}
+yum -y -q localinstall ${JAVA_DL_DEST}
 
-if [[ ${SELINUX_ENABLED} == 1 ]]; then
-	chcon -R -u system_u ${JAVA_PREFIX}
-fi
+rm -f ${JAVA_DL_DEST}
 
-update-alternatives --install "/usr/bin/java"   "java"                                    "${JAVA_INSTALL}/bin/java"   1
-update-alternatives --install "/usr/bin/java"   "java-1.${JAVA_MAJOR_VERSION}.0"          "${JAVA_INSTALL}/bin/java"   1
-update-alternatives --install "/usr/bin/java"   "java-1.${JAVA_MAJOR_VERSION}.0-oracle"   "${JAVA_INSTALL}/bin/java"   1
-update-alternatives --install "/usr/bin/javac"  "javac"                                   "${JAVA_INSTALL}/bin/javac"  1
-update-alternatives --install "/usr/bin/javac"  "javac-1.${JAVA_MAJOR_VERSION}.0"         "${JAVA_INSTALL}/bin/javac"  1
-update-alternatives --install "/usr/bin/javac"  "javac-1.${JAVA_MAJOR_VERSION}.0-oracle"  "${JAVA_INSTALL}/bin/javac"  1
-update-alternatives --install "/usr/bin/javaws" "javaws"                                  "${JAVA_INSTALL}/bin/javaws" 1
-update-alternatives --install "/usr/bin/javaws" "javaws-1.${JAVA_MAJOR_VERSION}.0"        "${JAVA_INSTALL}/bin/javaws" 1
-update-alternatives --install "/usr/bin/javaws" "javaws-1.${JAVA_MAJOR_VERSION}.0-oracle" "${JAVA_INSTALL}/bin/javaws" 1
-update-alternatives --install "/usr/bin/jre"    "jre"                                     "${JAVA_INSTALL}/jre"        1
-update-alternatives --install "/usr/bin/jre"    "jre-1.${JAVA_MAJOR_VERSION}.0"           "${JAVA_INSTALL}/jre"        1
-update-alternatives --install "/usr/bin/jre"    "jre-1.${JAVA_MAJOR_VERSION}.0-oracle"    "${JAVA_INSTALL}/jre"        1
-
-chown -R root:root ${JAVA_INSTALL}
-
-chmod a+x /usr/bin/java
-chmod a+x /usr/bin/javac
-chmod a+x /usr/bin/javaws
-
-export JAVA_HOME=${JAVA_INSTALL}
+export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
 cat >/etc/profile.d/oracle-java-${JAVA_MAJOR_VERSION}.sh <<< "export JAVA_HOME=${JAVA_HOME}"
 
-java -version
+echo "Successfully installed Oracle Java Version ${JAVA_MAJOR_VERSION}"

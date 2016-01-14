@@ -5,6 +5,8 @@
 # Licence: MIT
 # To run, see https://github.com/brian-dlee/centos-equip
 
+EQUIP_LOCATION=$(cd $(dirname $0) && pwd)
+
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
 GITHUB_URL="${GITHUB_ROOT}/raw/master"
 
@@ -60,19 +62,29 @@ function runInstallScript {
     echo "Running installation for '${1}'"
 
     component=${1}
-    tag=""
+    args=""
 
     if [[ $(echo ${component} | grep ':') ]]; then
         parts=($(echo ${component} | sed -r 's/:/ /'))
         component=${parts[0]}
-        tag=${parts[1]}
+        args=${parts[@]:1}
     fi
 
-    ${WGET_CMD} ${WGET_OPTS} ${GITHUB_URL}/equip_${component}.sh && bash equip_${component}.sh ${tag}
+    script_destination="${EQUIP_LOCATION}/equip_${component}.sh"
+    found_component_script=0
+
+    if [[ ! -e ${script_destination} ]]; then
+        ${WGET_CMD} -P ${EQUIP_LOCATION} ${GITHUB_URL}/equip_${component}.sh
+    else
+        echo "Found existing component script. Executing ${script_destination}."
+        found_component_script=1
+    fi
+
+    bash ${script_destination} ${args[@]}
 
     result=${?}
 
-    if [[ -e equip_${component}.sh ]]; then
+    if [[ -e equip_${component}.sh && ! ${found_component_script} ]]; then
         rm -f equip_${component}.sh
     fi
 
@@ -95,22 +107,28 @@ fi
 
 while [[ ${#} > 0 ]]; do
     case ${1} in
-        'base');;
-        'bamboo-remote-agent:*')
+        base);;
+        bamboo-remote-agent:*)
             components+=("java:8 ${1}");;
-        'java'|'java:7')
+        java|java:7)
             components+=("java:7");;
-        'java:8')
+        java:8)
             components+=("java:8");;
-        'maven'|'maven:3')
+        maven|maven:3)
             components+=("java:7" "maven:3");;
-        'tomcat'|'tomcat:7')
+        tomcat|tomcat:7)
             components+=("java:7" "tomcat:7");;
-        'tomcat:8')
+        tomcat:8)
             components+=("java:7" "tomcat:8");;
         *)
-            echo >&2 "Unknown installation request: '${1}'"
-            exit 2;;
+            if [[ ${1} =~ ^bamboo-remote-agent:\d+(\.\d)*:[^.]+(\.[^.]+)*$ ]]; then
+                echo "!!!! Matched fallback mechanism !!!!"
+                components+=("java:8 ${1}")
+            else
+                echo >&2 "Unknown installation request: '${1}'"
+                exit 2
+            fi
+            ;;
     esac
     shift
 done

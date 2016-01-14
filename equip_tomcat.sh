@@ -33,12 +33,6 @@ TC_INSTALL=/usr/local/src/apache-tomcat-${TC_VERSION}
 
 persistant_vars=()
 
-if [ ! -d "/usr/lib/jvm/" ]; then
-	echo "There is no installation of Java JDK in /usr/lib/jvm."
-    echo "Install a JDK (1.7 or above) before running this script."
-	exit 1
-fi
-
 echo "Installing Tomcat ${TC_MAJOR_VERSION}."
 
 yum install -y -q curl
@@ -86,7 +80,7 @@ ln -s ${CATALINA_HOME}/webapps /var/lib/tomcat/webapps
 ln -s ${CATALINA_HOME}/work /var/lib/tomcat/work
 
 if [[ -z ${JAVA_HOME} ]]; then
-    java_home_var="JAVA_HOME=$(update-alternatives --display jre | grep "\`best'" | egrep -o '/.+' | sed 's/\/jre.*//')"
+    java_home_var="JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')"
     export ${java_home_var}
 else
     java_home_var="JAVA_HOME=${JAVA_HOME}"
