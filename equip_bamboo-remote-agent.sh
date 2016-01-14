@@ -21,17 +21,21 @@ fi
 
 BAMBOO_AGENT_VERSION=${1}
 
-if [[ -z ${2} ]]; then
+if [[ -z ${BAMBOO_SERVER} && -z ${2} ]]; then
     echo >&2 "Bamboo server host name was not provided. The server url is required to complete the install."
     exit 2
 fi
 
-BAMBOO_SERVER_HOSTNAME=${2}
+if [[ -z ${BAMBOO_SERVER} ]]; then
+    BAMBOO_SERVER=${2}
+fi
 
-BAMBOO_SERVER_PORT=8085
-
-if [[ -n ${3} ]]; then
-    BAMBOO_SERVER_PORT=${3}
+if [[ ! ${BAMBOO_SERVER} =~ :[0-9]+$ ]]; then
+    if [[ -n ${3} ]]; then
+        BAMBOO_SERVER+="${3}"
+    else
+        BAMBOO_SERVER+=":8085"
+    fi
 fi
 
 echo "Installing Bamboo Agent version ${BAMBOO_AGENT_VERSION}."
@@ -43,11 +47,11 @@ BAMBOO_AGENT_JAR_DESTINATION=${BAMBOO_AGENT_PREFIX}/${BAMBOO_AGENT_JAR}
 yum install -y -q curl
 
 echo "Downloading the Bamboo Remote Agent JAR file"
-echo "Pulling from  http://${BAMBOO_SERVER_HOSTNAME}:${BAMBOO_SERVER_PORT}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR}"
+echo " -  http://${BAMBOO_SERVER_HOSTNAME}:${BAMBOO_SERVER_PORT}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR}"
 
-curl -L http://${BAMBOO_SERVER_HOSTNAME}:${BAMBOO_SERVER_PORT}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_JAR_DESTINATION}
+curl -L http://${BAMBOO_SERVER}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_JAR_DESTINATION}
 
-java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER_HOSTNAME}:${BAMBOO_SERVER_PORT}/agentServer/
+java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER}/agentServer/
 
 if [[ -z $JAVA_HOME ]]; then
     export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
