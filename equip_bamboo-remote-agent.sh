@@ -38,10 +38,10 @@ yum install -y -q curl
 
 curl -L http://${BAMBOO_SERVER_HOSTNAME}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_JAR_DESTINATION}
 
+java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER_HOSTNAME}/agentServer/
+
 if [[ -z $JAVA_HOME ]]; then
     export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
 fi
 
 cat >/etc/profile.d/bamboo-remote-agent.sh <<< "export JAVA_HOME=${JAVA_HOME}"
-
-java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER_HOSTNAME}/agentServer/
