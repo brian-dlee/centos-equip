@@ -8,7 +8,7 @@
 
 function cleanup {
     echo >&2 "! Failed installation, entering cleanup."
-    rm -f /atlassian-bamboo-agent-installer-${BAMBOO_AGENT_VERSION}.jar 2>/dev/null
+    rm -f ${BAMBOO_AGENT_JAR_DESTINATION} 2>/dev/null
     exit 1
 }
 

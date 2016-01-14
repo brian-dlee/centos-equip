@@ -8,7 +8,7 @@
 
 function cleanup {
 	echo >&2 "! Failed installation, entering cleanup."
-	rm -f /${JAVA_ARCHIVE} 2>/dev/null
+	rm -f /${JAVA_DL_DEST} 2>/dev/null
     exit 1
 }
 

@@ -137,6 +137,6 @@ for component in ${components[@]}; do
     runInstallScript ${component}
 
     if [[ ${?} != 0 ]]; then
-        break;
+        exit ${?}
     fi
 done
