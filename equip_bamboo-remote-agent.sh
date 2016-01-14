@@ -42,6 +42,9 @@ BAMBOO_AGENT_JAR_DESTINATION=${BAMBOO_AGENT_PREFIX}/${BAMBOO_AGENT_JAR}
 
 yum install -y -q curl
 
+echo "Downloading the Bamboo Remote Agent JAR file"
+echo "Pulling from  http://${BAMBOO_SERVER_HOSTNAME}:${BAMBOO_SERVER_PORT}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR}"
+
 curl -L http://${BAMBOO_SERVER_HOSTNAME}:${BAMBOO_SERVER_PORT}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} > ${BAMBOO_AGENT_JAR_DESTINATION}
 
 java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER_HOSTNAME}:${BAMBOO_SERVER_PORT}/agentServer/
