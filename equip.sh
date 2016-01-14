@@ -65,7 +65,7 @@ function runInstallScript {
     args=""
 
     if [[ $(echo ${component} | grep ':') ]]; then
-        parts=($(echo ${component} | sed -r 's/:/ /'))
+        parts=($(echo ${component} | sed -r 's/:/ /g'))
         component=${parts[0]}
         args=${parts[@]:1}
     fi
@@ -109,7 +109,8 @@ while [[ ${#} > 0 ]]; do
     case ${1} in
         base);;
         bamboo-remote-agent:*)
-            components+=("java:8 ${1}");;
+            components+=("java:8 ${1}")
+            ;;
         java|java:7)
             components+=("java:7");;
         java:8)
@@ -121,13 +122,8 @@ while [[ ${#} > 0 ]]; do
         tomcat:8)
             components+=("java:7" "tomcat:8");;
         *)
-            if [[ ${1} =~ ^bamboo-remote-agent:\d+(\.\d)*:[^.]+(\.[^.]+)*$ ]]; then
-                echo "!!!! Matched fallback mechanism !!!!"
-                components+=("java:8 ${1}")
-            else
-                echo >&2 "Unknown installation request: '${1}'"
-                exit 2
-            fi
+            echo >&2 "Unknown installation request: '${1}'"
+            exit 2
             ;;
     esac
     shift
