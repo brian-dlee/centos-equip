@@ -33,9 +33,9 @@ esac
 echo "Running installer Oracle Java Version ${JAVA_MAJOR_VERSION}"
 
 JAVA_PACKAGE="jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
-JAVA_INSTALL_ENTRY=$(update-alternatives --display java | grep 'priority' | grep "${JAVA_PACKAGE}")
+JAVA_INSTALL_ENTRY=$(update-alternatives --display java | grep 'priority' | grep "${JAVA_PACKAGE}" || true)
 
-if [[ ${JAVA_INSTALL_ENTRY} ]]; then
+if [[ -n ${JAVA_INSTALL_ENTRY} ]]; then
 	echo "Java ${JAVA_MAJOR_VERSION} is already installed."
 	echo "- ${JAVA_INSTALL_ENTRY}"
 	exit 0
@@ -46,7 +46,6 @@ yum install -y -q curl
 JAVA_RPM="jdk-${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-linux-x64.rpm"
 JAVA_DL_DIR='/root'
 JAVA_DL_DEST="${JAVA_DL_DIR}/${JAVA_RPM}"
-
 JAVA_DL_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}-${JAVA_MTN_KEY}/${JAVA_RPM}"
 
 echo "Downloading Java JDK RPM - ${JAVA_DL_URL}"
