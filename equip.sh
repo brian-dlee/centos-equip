@@ -7,16 +7,19 @@
 
 EQUIP_LOCATION=$(cd $(dirname $0) && pwd)
 EQUIP_OPT_FORCE_UPDATE=0
-EQUIP_OPT_SKIP_BASE=0
 
 GITHUB_ROOT="https://github.com/brian-dlee/centos-equip"
 GITHUB_URL="${GITHUB_ROOT}/raw/master"
 
-yum install -y -q which 2>/dev/null
+which 1>&2 2>/dev/null
 
-if [[ ${?} != 0 ]]; then
-    echo >&2 "The package 'which' could not be installed. Install 'which' and rerun."
-    exit 1
+if [[ ${?} == 127 ]]; then
+    yum install -y -q which 2>/dev/null
+
+    if [[ ${?} != 0 ]]; then
+        echo >&2 "The package 'which' could not be installed. Install 'which' and rerun."
+        exit 1
+    fi
 fi
 
 WGET_CMD=$(which wget 2>/dev/null)
@@ -25,8 +28,16 @@ WGET_OPTS="--quiet --no-check-certificate"
 export EQUIP_SELINUX_ENABLED=0
 export EQUIP_FIREWALL_ENABLED=0
 
-if [[ $(which sestatus 2>/dev/null) && -z $(sestatus | egrep 'SELinux status:\s+disabled') ]]; then
+sestatus 1>&2 2>/dev/null
+
+if [[ ${?} != 127 && -z $(sestatus | egrep 'SELinux status:\s+disabled') ]]; then
     export EQUIP_SELINUX_ENABLED=1
+fi
+
+firewall-cmd 1>&2 2>/dev/null
+
+if [[ ${?} != 127 && -n $(systemctl --all | grep 'firewalld.service') ]]; then
+    export EQUIP_FIREWALL_ENABLED=1
 fi
 
 # Make sure only root can run our script
@@ -61,7 +72,8 @@ function collapseComponents {
 }
 
 function runInstallScript {
-    if [[ ${1} == 'base' && ${EQUIP_OPT_SKIP_BASE} == 1 ]]; then
+    if [[ -n $(echo ${skips[@]} | grep "${1}") ]]; then
+        echo "Skipping installation of ${1}."
         return 0
     fi
 
@@ -115,6 +127,7 @@ function showUsage {
 }
 
 components=('base')
+skips=()
 
 if [[ ${#} == 0 ]]; then
     echo "No components provided."
@@ -140,9 +153,14 @@ while [[ ${#} > 0 ]]; do
             components+=("java:7" "tomcat:8");;
 
         --disable-base|-d)
-            EQUIP_OPT_SKIP_BASE=1;;
+            skips+=("base");;
         --force-update|-u)
             EQUIP_OPT_FORCE_UPDATE=1;;
+        --skip=*)
+            skips+=("${1#*=}");;
+        -s)
+            shift
+            skips+=("${1}");;
         --help|-h)
             showUsage
             exit 0
@@ -155,6 +173,7 @@ while [[ ${#} > 0 ]]; do
     shift
 done
 
+skips=($(collapseComponents ${skips[@]}))
 components=($(collapseComponents ${components[@]}))
 
 yum update -y -q
