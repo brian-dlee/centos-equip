@@ -182,6 +182,7 @@ for component in ${components[@]}; do
     runInstallScript ${component}
 
     if [[ ${?} != 0 ]]; then
-        exit ${?}
+        echo "Exiting due to failed component installations."
+        exit 3
     fi
 done
