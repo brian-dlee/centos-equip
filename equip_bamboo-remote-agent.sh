@@ -38,11 +38,16 @@ if [[ ! ${BAMBOO_SERVER} =~ :[0-9]+$ ]]; then
     fi
 fi
 
+INSTALL_PREFIX='/root'
+
+if [[ -z ${BAMBOO_HOME} ]]; then
+    BAMBOO_HOME="${INSTALL_PREFIX}/bamboo-agent-home"
+fi
+
 echo "Installing Bamboo Agent version ${BAMBOO_AGENT_VERSION}."
 
 BAMBOO_AGENT_JAR='atlassian-bamboo-agent-installer-'${BAMBOO_AGENT_VERSION}'.jar'
-BAMBOO_AGENT_PREFIX='/root'
-BAMBOO_AGENT_JAR_DESTINATION=${BAMBOO_AGENT_PREFIX}/${BAMBOO_AGENT_JAR}
+BAMBOO_AGENT_JAR_DESTINATION=${INSTALL_PREFIX}/${BAMBOO_AGENT_JAR}
 
 yum install -y -q curl
 
@@ -60,4 +65,4 @@ fi
 cat >/etc/profile.d/bamboo-remote-agent.sh < /dev/null
 cat >/etc/profile.d/bamboo-remote-agent.sh <<< "export JAVA_HOME=${JAVA_HOME}"
 cat >/etc/profile.d/bamboo-remote-agent.sh <<< "export BAMBOO_SERVER=${BAMBOO_SERVER}"
-cat >/etc/profile.d/bamboo-remote-agent.sh <<< "export BAMBOO_AGENT_JAR_LOCATION=${BAMBOO_AGENT_JAR_DESTINATION}"
+cat >/etc/profile.d/bamboo-remote-agent.sh <<< "export BAMBOO_HOME=${BAMBOO_HOME}"
