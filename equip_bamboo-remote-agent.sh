@@ -46,6 +46,12 @@ fi
 
 echo "Installing Bamboo Agent version ${BAMBOO_AGENT_VERSION}."
 
+if [[ -e ${BAMBOO_HOME} && -e "${BAMBOO_HOME}/bin/bamboo-agent.sh" ]]; then
+    echo "Bamboo Remote Agent is already installed at ${BAMBOO_HOME}."
+    echo "If you'd like to reinstall, delete ${BAMBOO_HOME} and rerun this script."
+    exit 0
+fi
+
 BAMBOO_AGENT_JAR='atlassian-bamboo-agent-installer-'${BAMBOO_AGENT_VERSION}'.jar'
 BAMBOO_AGENT_JAR_DESTINATION=${INSTALL_PREFIX}/${BAMBOO_AGENT_JAR}
 
