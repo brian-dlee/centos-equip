@@ -80,7 +80,7 @@ ln -s ${CATALINA_HOME}/webapps /var/lib/tomcat/webapps
 ln -s ${CATALINA_HOME}/work /var/lib/tomcat/work
 
 if [[ -z ${JAVA_HOME} ]]; then
-    java_home_var="JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')"
+    java_home_var="JAVA_HOME=/usr/java/default"
     export ${java_home_var}
 else
     java_home_var="JAVA_HOME=${JAVA_HOME}"
