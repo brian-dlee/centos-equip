@@ -22,8 +22,8 @@ case ${1} in
 	''|7);;
 	8)
 		JAVA_MAJOR_VERSION='8'
-		JAVA_MINOR_VERSION='66'
-		JAVA_MTN_KEY='b17'
+		JAVA_MINOR_VERSION='72'
+		JAVA_MTN_KEY='b15'
 		;;
 	*)
 		echo >&2 "Cannot install the desired version of java (${1})"
