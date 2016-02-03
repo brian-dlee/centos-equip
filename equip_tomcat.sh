@@ -15,7 +15,7 @@ function cleanup {
 trap 'cleanup' ERR
 
 TC_MAJOR_VERSION=7
-TC_VERSION=7.0.65
+TC_VERSION=7.0.67
 
 case ${1} in
 	''|7);;
