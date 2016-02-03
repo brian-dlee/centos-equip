@@ -44,7 +44,7 @@ if [[ ${SELINUX_ENABLED} == 1 ]]; then
 fi
 
 if [[ -z $JAVA_HOME ]]; then
-    export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
+    export JAVA_HOME=/usr/java/default
 fi
 
 cat >/etc/profile.d/maven.sh <<< "export JAVA_HOME=${JAVA_HOME}"
