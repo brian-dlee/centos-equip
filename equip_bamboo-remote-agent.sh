@@ -65,7 +65,7 @@ curl -L http://${BAMBOO_SERVER}/agentServer/agentInstaller/${BAMBOO_AGENT_JAR} >
 java -jar ${BAMBOO_AGENT_JAR_DESTINATION} http://${BAMBOO_SERVER}/agentServer/ install
 
 if [[ -z $JAVA_HOME ]]; then
-    export JAVA_HOME=$(update-alternatives --display java | grep "\`best'" | egrep -o '/.+' | sed 's/bin\/java.*//')
+    export JAVA_HOME=/usr/java/default
 fi
 
 cat >/etc/profile.d/bamboo-remote-agent.sh < /dev/null
