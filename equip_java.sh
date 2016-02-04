@@ -55,7 +55,7 @@ yum -y -q localinstall ${JAVA_DL_DEST}
 
 rm -f ${JAVA_DL_DEST}
 
-export JAVA_HOME=$(/usr/java/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION})
+export JAVA_HOME=/usr/java/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}
 cat >/etc/profile.d/oracle-java-${JAVA_MAJOR_VERSION}.sh <<< "export JAVA_HOME=${JAVA_HOME}"
 
 echo "Successfully installed Oracle Java Version ${JAVA_MAJOR_VERSION}"
