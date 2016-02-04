@@ -102,7 +102,7 @@ function runInstallScript {
         found_component_script=1
     fi
 
-    bash ${script_destination} ${args[@]}
+    bash --login ${script_destination} ${args[@]}
 
     result=${?}
 
